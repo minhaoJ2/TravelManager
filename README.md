@@ -1,1 +1,3 @@
-# travel_manager
+Travek Manager
+
+CS 411 Course Project
