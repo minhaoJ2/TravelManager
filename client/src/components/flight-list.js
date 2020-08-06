@@ -1,42 +1,68 @@
 import React, { Component } from "react";
-import FlightDataSerive from "../services/flight.service";
+import FlightDataService from "../services/flight.service";
 import { Link } from "react-router-dom";
 
 export default class FlightList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
-    this.retrieveTutorials = this.retrieveTutorials.bind(this);
+    this.onChangeSearchDeparture = this.onChangeSearchDeparture.bind(this);
+    this.onChangeSearchArrival = this.onChangeSearchArrival.bind(this);
+    this.onChangeSearchAirline = this.onChangeSearchAirline.bind(this);
+    this.onChangeSearchModel = this.onChangeSearchModel.bind(this);
+    this.retrieveFlights = this.retrieveFlights.bind(this);
     this.refreshList = this.refreshList.bind(this);
-    this.setActiveTutorial = this.setActiveTutorial.bind(this);
-    this.removeAllTutorials = this.removeAllTutorials.bind(this);
-    this.searchTitle = this.searchTitle.bind(this);
+    this.setActiveFlights = this.setActiveFlights.bind(this);
+    this.removeAllFlights = this.removeAllFlights.bind(this);
+    this.searchDeparture = this.searchDeparture.bind(this);
+    this.searchArrival = this.searchArrival.bind(this);
+    this.searchAirline = this.searchAirline.bind(this);
+    this.searchModel = this.searchModel.bind(this);
 
     this.state = {
-      tutorials: [],
-      currentTutorial: null,
+      flights: [],
+      currentFlight: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchDeparture: "",
+      searchArrival: "",
+      searchAirline: "",
+      searchModel: ""
     };
   }
 
   componentDidMount() {
-    this.retrieveTutorials();
+    this.retrieveFlights();
   }
 
-  onChangeSearchTitle(e) {
-    const searchTitle = e.target.value;
+  onChangeSearchDeparture(e) {
+    const searchDeparture = e.target.value;
 
     this.setState({
-      searchTitle: searchTitle
+      searchDeparture: searchDeparture
     });
   }
-
-  retrieveTutorials() {
-    FlightDataSerive.getAll()
+  onChangeSearchArrival(e) {
+    const searchArrival = e.target.value;
+    this.setState({
+      searchArrival: searchArrival
+    });
+  }
+  onChangeSearchAirline(e) {
+    const searchAirline = e.target.value;
+    this.setState({
+      searchAirline: searchAirline
+    });
+  }
+  onChangeSearchModel(e) {
+    const searchModel = e.target.value;
+    this.setState({
+      searchModel: searchModel
+    })
+  }
+  retrieveFlights() {
+    FlightDataService.getAll()
       .then(response => {
         this.setState({
-          tutorials: response.data
+          flights: response.data
         });
         console.log(response.data);
       })
@@ -46,22 +72,22 @@ export default class FlightList extends Component {
   }
 
   refreshList() {
-    this.retrieveTutorials();
+    this.retrieveFlights();
     this.setState({
-      currentTutorial: null,
+      currentFlight: null,
       currentIndex: -1
     });
   }
 
-  setActiveTutorial(tutorial, index) {
+  setActiveFlights(flight, index) {
     this.setState({
-      currentTutorial: tutorial,
+      currentFlight: flight,
       currentIndex: index
     });
   }
 
-  removeAllTutorials() {
-    FlightDataSerive.deleteAll()
+  removeAllFlights() {
+    FlightDataService.deleteAll()
       .then(response => {
         console.log(response.data);
         this.refreshList();
@@ -71,21 +97,58 @@ export default class FlightList extends Component {
       });
   }
 
-  searchTitle() {
-    FlightDataSerive.findByTitle(this.state.searchTitle)
+  searchDeparture() {
+    FlightDataService.findByDeparture(this.state.searchDeparture)
       .then(response => {
         this.setState({
-          tutorials: response.data
+          flights: response.data
         });
-        console.log(response.data);
+        console.log("Search Departure",response.data);
       })
       .catch(e => {
         console.log(e);
       });
   }
+  searchArrival() {
+    FlightDataService.findByArrival(this.state.searchArrival)
+      .then(response => {
+        this.setState({
+          flights: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
+  searchAirline() {
+    FlightDataService.findByAirline(this.state.searchAirline)
+      .then(response => {
+        this.setState({
+          flights: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
+
+  searchModel() {
+    FlightDataService.findByModel(this.state.searchModel)
+      .then(response => {
+        this.setState({
+          flights: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
 
   render() {
-    const { searchTitle, tutorials, currentTutorial, currentIndex } = this.state;
+    const { searchDeparture, searchArrival, searchAirline, searchModel, flights, currentFlight, currentIndex } = this.state;
 
     return (
       <div className="list row">
@@ -94,15 +157,75 @@ export default class FlightList extends Component {
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
-              value={searchTitle}
-              onChange={this.onChangeSearchTitle}
+              placeholder="Search by Departure"
+              value={searchDeparture}
+              onChange={this.onChangeSearchDeparture}
             />
             <div className="input-group-append">
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={this.searchTitle}
+                onClick={this.searchDeparture}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-8">
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Arrival"
+              value={searchArrival}
+              onChange={this.onChangeSearchArrival}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={this.searchArrival}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-8">
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Airline"
+              value={searchAirline}
+              onChange={this.onChangeSearchAirline}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={this.searchAirline}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-8">
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Model Name"
+              value={searchModel}
+              onChange={this.onChangeSearchModel}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={this.searchModel}
               >
                 Search
               </button>
@@ -113,17 +236,17 @@ export default class FlightList extends Component {
           <h4>Flight List</h4>
 
           <ul className="list-group">
-            {tutorials &&
-              tutorials.map((tutorial, index) => (
+            {flights &&
+              flights.map((flight, index) => (
                 <li
                   className={
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => this.setActiveTutorial(tutorial, index)}
+                  onClick={() => this.setActiveFlights(flight, index)}
                   key={index}
                 >
-                  {tutorial.title}
+                  Departure: {flight.Departure} Arrival: {flight.Arrival} Flight Number: {flight.FlightNum}
                 </li>
               ))}
           </ul>
@@ -136,30 +259,42 @@ export default class FlightList extends Component {
           </button>
         </div>
         <div className="col-md-6">
-          {currentTutorial ? (
+          {currentFlight ? (
             <div>
-              <h4>Tutorial</h4>
+              <h4>Flights</h4>
               <div>
                 <label>
-                  <strong>Title:</strong>
+                  <strong>Departure:</strong>
                 </label>{" "}
-                {currentTutorial.title}
+                {currentFlight.Departure}
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Arrival:</strong>
                 </label>{" "}
-                {currentTutorial.description}
+                {currentFlight.Arrival}
+              </div>
+              <div>
+                <label>
+                  <strong>Airline:</strong>
+                </label>{" "}
+                {currentFlight.Airline}
+              </div>
+              <div>
+                <label>
+                  <strong>Model Name:</strong>
+                </label>{" "}
+                {currentFlight.ModelName}
               </div>
               <div>
                 <label>
                   <strong>Status:</strong>
                 </label>{" "}
-                {currentTutorial.published ? "Published" : "Pending"}
+                {currentFlight.uploaded ? "Published" : "Pending"}
               </div>
 
               <Link
-                to={"/tutorials/" + currentTutorial.id}
+                to={"/flights/" + currentFlight.FlightNum}
                 className="badge badge-warning"
               >
                 Edit
@@ -168,7 +303,7 @@ export default class FlightList extends Component {
           ) : (
             <div>
               <br />
-              <p>Please click on a Tutorial...</p>
+              <p>Please click on a flight</p>
             </div>
           )}
         </div>

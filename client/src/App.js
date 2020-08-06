@@ -11,6 +11,7 @@ import Flight from "./components/flight";
 import FlightList from "./components/flight-list";
 import AirlineCreateForm from "./components/Airline/AirlineCreateForm"
 import ModelCreateForm from "./components/ModelName/ModelCreateForm"
+import PageRank from "./components/PageRank"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
               <Link to={"/rank"} className="nav-link">City Rank</Link>
             </li>
             <li className="nav-item">
-              <Link to={"/add"} className="nav-link">Add Flight</Link>
+              <Link to={"/addFlight"} className="nav-link">Add Flight</Link>
             </li>
             <li className="nav-item">
               <Link to={"/Airline"} className="nav-link">Airline</Link>
@@ -38,10 +39,11 @@ function App() {
         <div className="container mt-3">
           <Switch>
             <Route exact path={["/", "/flights"]} component={FlightList} />
-            <Route exact path="/add" component={AddFlight}/>
-            <Route path="/flights/:id" component={Flight}/>
+            <Route exact path="/addFlight" component={AddFlight}/>
+            <Route path="/flights/:FlightNum" component={Flight}/>
             <Route path="/Airline" component={AirlineCreateForm}/>
             <Route path="/ModelName" component={ModelCreateForm}/>
+            <Route path="/rank" component={PageRank}/>
           </Switch>
         </div>
       </div>

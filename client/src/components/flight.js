@@ -16,7 +16,7 @@ export default class Flight extends Component {
 
     this.state = {
       currentFlight: {
-        id: null,
+        FlightNum: "",
         Departure: "",
         Arrival: "",
         Airline: "",
@@ -28,7 +28,7 @@ export default class Flight extends Component {
   }
 
   componentDidMount() {
-    this.getFlight(this.props.match.params.id);
+    this.getFlight(this.props.match.params.FlightNum);
   }
 
   onChangeFlightNum(e) {
@@ -88,12 +88,15 @@ export default class Flight extends Component {
     }));
   }
 
-  getFlight(id) {
-    FlightDataService.get(id)
+  getFlight(FlightNum) {
+    console.log("1234", FlightNum);
+    FlightDataService.findByFlightNum(FlightNum)
       .then(response => {
-        this.setState({
-          currentFlight: response.data
-        });
+        if (response.data.length > 0) {
+          this.setState({
+            currentFlight: response.data[0]
+          });
+        }
         console.log(response.data);
       })
       .catch(e => {
@@ -103,7 +106,7 @@ export default class Flight extends Component {
 
   updateUploaded(status) {
     var data = {
-      id: this.state.currentFlight.id,
+      FlightNum: this.state.currentFlight.FlightNum,
       Departure: this.state.currentFlight.Departure,
       Arrival: this.state.currentFlight.Arrival,
       Airline: this.state.currentFlight.Airline,
@@ -128,7 +131,7 @@ export default class Flight extends Component {
 
   updateFlight() {
     FlightDataService.update(
-      this.state.currentFlight.id,
+      this.state.currentFlight.FlightNum,
       this.state.currentFlight
     )
       .then(response => {
@@ -143,7 +146,8 @@ export default class Flight extends Component {
   }
 
   deleteFlight() {    
-    FlightDataService.delete(this.state.currentFlight.id)
+    console.log("1234",this.state.currentFlight);
+    FlightDataService.delete(this.state.currentFlight.FlightNum)
       .then(response => {
         console.log(response.data);
         this.props.history.push('/flights')
@@ -180,6 +184,28 @@ export default class Flight extends Component {
                   id="Arrival"
                   value={currentFlight.Arrival}
                   onChange={this.onChangeArrival}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="Airline">Airline</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="Airline"
+                  value={currentFlight.Airline}
+                  onChange={this.onChangeAirline}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="ModelName">Model Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="ModelName"
+                  value={currentFlight.ModelName}
+                  onChange={this.onChangeModel}
                 />
               </div>
 
