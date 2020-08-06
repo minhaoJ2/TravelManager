@@ -4,21 +4,24 @@ class FlightDataService {
   getAll() {
     return http.get("/flights");
   }
-
-  get(id) {
-    return http.get(`/flights/${id}`);
-  }
-
   create(data) {
     return http.post("/flights", data);
   }
-
-  update(id, data) {
-    return http.put(`/flights/${id}`, data);
+  createAirline(data) {
+    return http.post("/Airline", data);
+  }
+  createModel(data) {
+    return http.post("/ModelName", data);
+  }
+  update(FlightNum, data) {
+    return http.put(`/flights/FlightNum/"${FlightNum}"`, data);
   }
 
-  delete(id) {
-    return http.delete(`/flights/${id}`);
+  getRank() {
+    return http.get("/rank");
+  }
+  delete(FlightNum) {
+    return http.delete(`/flights/FlightNum/"${FlightNum}"`);
   }
 
   deleteAll() {
@@ -26,23 +29,23 @@ class FlightDataService {
   }
 
   findByFlightNum(FlightNum) {
-    return http.get(`/flights?FlightNum=${FlightNum}`);
+    return http.get(`/flights/FlightNum/"${FlightNum}"`);
   }
 
   findByDeparture(Departure) {
-    return http.get(`/flights?Departure=${Departure}`);
+    return http.get(`/flights/"${Departure}"`);
   }
 
   findByArrival(Arrival) {
-    return http.get(`/flights?Arrival=${Arrival}`);
+    return http.get(`/flights/Arrival/"${Arrival}"`);
   }
 
   findByAirline(Airline) {
-    return http.get(`/flights?Airline=${Airline}`);
+    return http.get(`/flights/Airline/"${Airline}"`);
   }
 
-  findByModelName(ModelName) {
-    return http.get(`/flights?ModelName=${ModelName}`);
+  findByModel(ModelName) {
+    return http.get(`/flights/ModelName/"${ModelName}"`);
   }
 }
 
